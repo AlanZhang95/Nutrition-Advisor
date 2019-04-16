@@ -22,7 +22,7 @@ class RegistrationForm extends React.Component {
             values.confirm
         );
         this.props.history.push('/');
-        console.log('Received values of form: ', values);
+        //console.log('Received values of form: ', values);
       }
     });
   }

@@ -16,7 +16,7 @@ class DietPlanDetail extends React.Component {
 
     componentDidMount() {
         const planID = this.props.match.params.planID;
-        axios.get(`http://127.0.0.1:8000/api/plans/${planID}`)
+        axios.get(`http://127.0.0.1:8000/dietplan-api/plans/${planID}`)
         .then(res => {
             this.setState({
                 plans: res.data
@@ -26,7 +26,7 @@ class DietPlanDetail extends React.Component {
 
     handleDelete = (event) => {
         const planID = this.props.match.params.planID;
-        axios.delete(`http://127.0.0.1:8000/api/plans/${planID}`);
+        axios.delete(`http://127.0.0.1:8000/dietplan-api/plans/${planID}`);
         this.props.history.push('/');
         this.forceUpdate();
     }

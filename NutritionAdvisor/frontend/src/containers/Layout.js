@@ -27,7 +27,6 @@ class CustomLayout extends React.Component {
             <Menu.Item key="2">
               <Link to="/plans"> Diet Plans </Link>
             </Menu.Item>
-              {console.log("debug msg:", this.props)}
               {
                 this.props.isAuthenticated ?
 
@@ -49,15 +48,15 @@ class CustomLayout extends React.Component {
             <Menu
               mode="inline"
               defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
               style={{ height: '100%', borderRight: 0 }}
             >
-              <SubMenu key="sub1" title={<span><Icon type="user" /> {
-                this.props.isAuthenticated ?
-                  "Welcome" : "Hello Guest"
-              }</span>}>
-                <Menu.Item key="1">option1</Menu.Item>
-              </SubMenu>
+              <Menu.Item key="sub1" > 
+                <Icon type="user" />
+                <span>
+                {this.props.isAuthenticated ?
+                  <Link to={`/users/${this.props.current_user}`}>Welcome {this.props.current_user}</Link> :  <Link to="/login">Hello Guest</Link>
+              }</span>
+              </Menu.Item>
               <SubMenu key="sub2" title={<span><Icon type="laptop" />Advanced</span>}>
                 <Menu.Item key="5">Popular Foods</Menu.Item>
               </SubMenu>
@@ -67,10 +66,6 @@ class CustomLayout extends React.Component {
             </Menu>
           </Sider>
           <Layout style={{ padding: '0 24px 24px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item><Link to="/">Home</Link></Breadcrumb.Item>
-              <Breadcrumb.Item><Link to="/">List</Link></Breadcrumb.Item>
-            </Breadcrumb>
             <Content style={{
               background: '#fff', padding: 24, margin: 0, minHeight: 280,
             }}

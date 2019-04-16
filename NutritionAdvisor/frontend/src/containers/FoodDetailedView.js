@@ -1,12 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import { Card, Button, Form } from 'antd';
+import { Card, Button, Form, Collapse} from 'antd';
 import CustomForm from '../components/Form'
 
-const formTailLayout = {
-    labelCol: { span: 4 },
-    wrapperCol: { span: 8, offset: 20},
-};
+const Panel = Collapse.Panel;
 
 const source_dict = {
                   "pt": "Main Protein Source",
@@ -42,7 +39,7 @@ class FoodDetail extends React.Component {
         return (
             <div>
                 <Card title={item.name} >
-                    <h2> {source_dict[item.source_type]}</h2>
+                    <h3> This is a {source_dict[item.source_type]}</h3>
 
                     <h2> Nutritions: </h2>
 
@@ -52,7 +49,7 @@ class FoodDetail extends React.Component {
                         Fat: {item.fat}
                 </Card><br />
 
-                { 
+                {/* 
                     typeof summary !== 'undefined' ?
                     <Card title="summary" >
                         Number of Carb source foods: {summary.Carbonhydrates} <br />
@@ -71,14 +68,22 @@ class FoodDetail extends React.Component {
                         "Loading..."
                     </Card>
 
-                }
+                */}
 
-                <CustomForm requestType='put' foodID={this.props.match.params.foodID} btnText='Update'/>
-                <Form onSubmit={this.handleDelete}>
-                    <Form.Item {...formTailLayout} layout='inline'>
-                        <Button type='danger' htmlType='submit'> Delete </Button>
-                    </Form.Item>
-                </Form>
+                
+                <Collapse bordered={false} defaultActiveKey={['3']}>
+                    <Panel header="Update this food" key="1">
+                        <CustomForm requestType='put' foodID={this.props.match.params.foodID} btnText='Update'/>
+                    </Panel>
+                    <Panel header="Delete this food" key="2">
+                        <Form onSubmit={this.handleDelete}>
+                            Are you sure?
+                            <Form.Item layout='inline'>
+                                <Button type='danger' htmlType='submit'> Confirm Delete! </Button>
+                            </Form.Item>
+                        </Form>
+                    </Panel>
+                  </Collapse>
             </div>
         )
     }

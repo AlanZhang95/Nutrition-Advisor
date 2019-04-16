@@ -6,7 +6,7 @@ import {
 
 const formItemLayout = {
     labelCol: { span: 4 },
-    wrapperCol: { span: 5 },
+    wrapperCol: { span: 10 },
 };
 
 const formTailLayout = {
@@ -20,12 +20,12 @@ class CustomForm extends React.Component {
         //event.preventDefault();
 
         const data = {
-            Name: event.target.elements.name.value,
-            Carbonhydrates: event.target.elements.carbs.value,
-            Fiber: event.target.elements.fiber.value,
-            Protein: event.target.elements.protein.value,
-            Fat: event.target.elements.fat.value,
-            SourceType: event.target.elements.source_type.value
+            name: event.target.elements.name.value,
+            carbs: event.target.elements.carbs.value,
+            fiber: event.target.elements.fiber.value,
+            protein: event.target.elements.protein.value,
+            fat: event.target.elements.fat.value,
+            source_type: event.target.elements.source_type.value
         };
 
         switch ( requestType ) {
@@ -47,22 +47,22 @@ class CustomForm extends React.Component {
           <div>
             <Form onSubmit={(event) => this.handleFormSubmit(event, this.props.requestType, this.props.foodID)}>
               <Form.Item {...formItemLayout} label="Name">
-                <Input name="Name" placeholder="Food Name" /> <br/>
+                <Input name="name" placeholder="Food Name" /> <br/>
               </Form.Item>
               <Form.Item {...formItemLayout} label="Carb">
-                <Input name="Carb" placeholder="Carbonhydrate in gram" />
-              </Form.Item>
-              <Form.Item {...formItemLayout} label="Fiber">
-                <Input name="Fiber" placeholder="Fiber in gram" />
+                <Input name="carbs" placeholder="Carbonhydrate in gram" />
               </Form.Item>
               <Form.Item {...formItemLayout} label="Protein">
-                <Input name="Protein" placeholder="Protein in gram" />
+                <Input name="protein" placeholder="Protein in gram" />
+              </Form.Item>
+              <Form.Item {...formItemLayout} label="Fiber">
+                <Input name="fiber" placeholder="Fiber in gram" />
               </Form.Item>
               <Form.Item {...formItemLayout} label="Fat">
-                <Input name="Fat" placeholder="Fat in gram" />
+                <Input name="fat" placeholder="Fat in gram" />
               </Form.Item>
                <Form.Item {...formItemLayout} label="Source Type">
-                <Input name="SourceType" placeholder="SourceType of this food" />
+                <Input name="source_type" placeholder="SourceType of this food" />
               </Form.Item>
               <Form.Item {...formTailLayout} >
                 <Button type="primary" htmlType="submit">{this.props.btnText}</Button>
