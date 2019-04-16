@@ -6,7 +6,16 @@ from rest_framework import serializers
 from rest_auth.models import TokenModel
 from drf_writable_nested import WritableNestedModelSerializer
 
-
+def cal_bmr(gender, age, weight, height):  #reference: http://www.jurnal.unsyiah.ac.id/AIJST/article/view/5196/pdf(Hlbert and Elesa, 2004)
+    male_bmr = 66 + 13.7 * weight + 5 * height - 6.8 * age
+    female_bmr = 655 + 9.6 * weight + 1.8 * height - 4.7 * age
+    if gender == "Male" :
+        return male_bmr
+    elif gender == "Female" :
+        return female_bmr
+    else:
+        return (female_bmr + male_bmr) / 2
+         
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -14,13 +23,77 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(WritableNestedModelSerializer):
     user = UserSerializer()
+    bmr = serializers.SerializerMethodField()
+    advised_calories = serializers.SerializerMethodField()
+    #bmr: basal metabolic rate
+    
+    def get_bmr(self, obj):
+        gender_q = UserProfile.objects.values('gender').filter(id__in=UserProfile.objects.values('id').filter(id=obj.id))
+        age_q = UserProfile.objects.values('age').filter(id__in=UserProfile.objects.values('id').filter(id=obj.id))
+        weight_q = UserProfile.objects.values('weight').filter(id__in=UserProfile.objects.values('id').filter(id=obj.id))
+        height_q = UserProfile.objects.values('height').filter(id__in=UserProfile.objects.values('id').filter(id=obj.id))
+        gender = ""
+        age = 0
+        weight = 0
+        height = 0
+        for str1 in gender_q:
+            gender = str1['gender']
+        for int2 in age_q:
+            age = int2['age']
+        for int3 in weight_q:
+            weight = int3['weight']
+        for int4 in height_q:
+            height = int4['height']
+        bmr = cal_bmr(gender, age, weight, height)
+        return bmr
+    def get_advised_calories(self, obj):
+        gender_q = UserProfile.objects.values('gender').filter(id__in=UserProfile.objects.values('id').filter(id=obj.id))
+        age_q = UserProfile.objects.values('age').filter(id__in=UserProfile.objects.values('id').filter(id=obj.id))
+        weight_q = UserProfile.objects.values('weight').filter(id__in=UserProfile.objects.values('id').filter(id=obj.id))
+        height_q = UserProfile.objects.values('height').filter(id__in=UserProfile.objects.values('id').filter(id=obj.id))
+        gender = ""
+        age = 0
+        weight = 0
+        height = 0
+        for str1 in gender_q:
+            gender = str1['gender']
+        for int2 in age_q:
+            age = int2['age']
+        for int3 in weight_q:
+            weight = int3['weight']
+        for int4 in height_q:
+            height = int4['height']
+        bmr = cal_bmr(gender, age, weight, height)
+        active_level_q = UserProfile.objects.values('activity').filter(id__in=UserProfile.objects.values('id').filter(id=obj.id))
+        active_level = ""
+        for str1 in active_level_q:
+            active_level = str1['activity']
+        if active_level == 'NA':
+            bmr = bmr * 1.01 + 20
+        elif active_level == 'AC':
+            bmr = bmr * 1.03 + 50
+        else:
+            bmr = bmr * 1.08 + 100
+        my_goal_q = UserProfile.objects.values('my_goal').filter(id__in=UserProfile.objects.values('id').filter(id=obj.id))
+        my_goal = ''
+        for str2 in my_goal_q:
+            my_goal = str2['my_goal']
+        if my_goal == 'LF':
+            return bmr * 0.975 - 20
+        elif my_goal == 'GM':
+            return bmr * 1.015 + 50
+        else:
+            return bmr
+
     class Meta:
         model = UserProfile
-        fields = ('user', 'gender', 'my_goal', 'height', 'weight', 'activity', 'age')
+        fields = ('user', 'gender', 'my_goal', 'height', 'weight', 'activity', 'age', 'bmr', 'advised_calories')
 
 class TokenSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = TokenModel
         fields = ('key', 'user')
+
+
 
