@@ -27,11 +27,13 @@ class DietPlanSerializer(serializers.ModelSerializer):
       #      where gb.plan_id = obj.id and 
 
       #  """
-        food_query = Food.objects.values('fat').filter(id__in=GeneratedBy.objects.values('food_id').filter(plan_id=obj.id))
+        food_query = Food.objects.values('fat', 'id').filter(id__in=GeneratedBy.objects.values('food_id').filter(plan_id=obj.id))
         fat_cal = 0
         for food in food_query:
-    #        amount = GeneratedBy.objects.values('amount').
-            fat_cal += food['fat'] * 8# * amount
+            amount = GeneratedBy.objects.values('amount','food_id').filter(food_id=food['id'])
+            for num in amount:
+                print(num)
+                fat_cal += food['fat'] * 8 * num['amount'] / 100
         return fat_cal
 
     class Meta:
