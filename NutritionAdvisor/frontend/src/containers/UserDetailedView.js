@@ -16,6 +16,43 @@ const formItemLayout = {
       },
     };
 
+const style1 = {
+  position: 'absolute',
+  top: '-2px',
+  width: '16px',
+  height: '16px',
+  line_height: '1',
+  font_size: '16px',
+  left: '0'
+}
+
+const style2 = {
+  position: 'absolute',
+  top: '-2px',
+  width: '16px',
+  height: '16px',
+  line_height: '1',
+  font_size: '16px',
+  right: '0'
+}
+
+const active = {
+    0: "Not Active",
+    50: "Active",
+    100: "Very Active"
+}
+const active_rev = {
+    VA: 100,
+    AC: 50,
+    NA: 0,
+}
+
+const active_rev2 = {
+    100: "VA",
+    50: "AC",
+    0: "NA",
+}
+
 class UserDetail extends React.Component {
     
     state = {
@@ -39,12 +76,11 @@ class UserDetail extends React.Component {
     }
 
     handleChange = (value) => {
-        this.setState({ value });
+        this.setState({ activity:  active_rev2[value]});
     }
 
-    handleFormSubmit = (event, userID, user) => {
+    handleFormSubmit = (event, userID) => {
         //event.preventDefault();
-        console.log(event.target.elements)
         const data = {
             gender: this.state.gender,
             my_goal: this.state.my_goal, 
@@ -77,19 +113,22 @@ class UserDetail extends React.Component {
             activity: value
         })
     }
+    handleClick = (value) => {
+        localStorage.setItem('cal', this.state.user.advised_calories)
+    }
 
+    formatter = (value) => {
+        return `${active[value]}`
+    }
     render() {
         const item = this.state.user;
         return (
             <div>
-
+            <h1> My Profile </h1>
             {
 
-                typeof item.user !== 'undefined' ? 
-                <Form {...formItemLayout} onSubmit={(event) => this.handleFormSubmit(event, item.id, item.user)}>
-                    <Form.Item label="Username">
-                     <Input name='username' defaultValue={item.user.username} disabled={true}/>
-                    </Form.Item>
+                typeof item.gender !== 'undefined' ? 
+                <Form {...formItemLayout} onSubmit={(event) => this.handleFormSubmit(event, item.id)}>
                     <Form.Item label="Gender">
                     <Select name="gender" defaultValue={item.gender} onChange={this.handleChangeGender}>
                       <Option value="Male">Male</Option>
@@ -105,11 +144,11 @@ class UserDetail extends React.Component {
                     </Select>
                     </Form.Item>
                     <Form.Item label="Activity Level">
-                      <Select name="activity" defaultValue={item.activity} onChange={this.handleChangeAct}>
-                          <Option value="VA">Very Active</Option>
-                          <Option value="AC">Active</Option>
-                          <Option value="NA">Not Active</Option>
-                      </Select>
+                    <div className="icon-wrapper" style={{position: 'relative', padding: '0px 30px',}}>
+                        <Icon type="frown-o" style={style1}/>
+                    <Slider defaultValue={active_rev[item.activity]} step={50} tipFormatter={this.formatter} onChange={this.handleChange}/>
+                        <Icon type="smile-o" style={style2}/>
+                    </div>
                     </Form.Item>
                     <Form.Item label="Height">
                      <Input name='height' defaultValue={item.height} />  
@@ -129,7 +168,8 @@ class UserDetail extends React.Component {
                 "loading..."
             }
 
-            <h1>User Status:</h1>
+            <h1>My Status</h1>
+
 
             <Row gutter={16}>
                     <Col span={12}>
@@ -142,7 +182,7 @@ class UserDetail extends React.Component {
 
             <h1></h1>
 
-            <Button type="primary" >Create a Diet Plan</Button>
+            <Button type="primary" href='/dietplan/create' onClick={this.handleClick} >Create a Diet Plan</Button>
 
             </div>
         )
