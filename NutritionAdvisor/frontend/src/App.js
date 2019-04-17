@@ -30,6 +30,7 @@ const mapStateToProps = state => {
   return {
     isAuthenticated: state.token !== null,
     current_user: localStorage.getItem('current_user'),
+    current_id: localStorage.getItem('current_id'),
   }
 }
 

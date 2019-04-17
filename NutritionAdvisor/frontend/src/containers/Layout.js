@@ -54,7 +54,7 @@ class CustomLayout extends React.Component {
                 <Icon type="user" />
                 <span>
                 {this.props.isAuthenticated ?
-                  <Link to={`/users/${this.props.current_user}`}>Welcome {this.props.current_user}</Link> :  <Link to="/login">Hello Guest</Link>
+                  <Link to={`/users/${this.props.current_id}`}>Welcome {this.props.current_user}</Link> :  <Link to="/login">Hello Guest</Link>
               }</span>
               </Menu.Item>
               <SubMenu key="sub2" title={<span><Icon type="laptop" />Advanced</span>}>
