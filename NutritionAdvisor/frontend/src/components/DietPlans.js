@@ -13,7 +13,7 @@ const DietPlans = (props) => {
             <Card title={<a href={`plans/${item.id}`}>{item.name}</a>}>
                 Created By: {item.username} <br/>
                 Date: {item.date.substring(0, 10)} <br/>
-                Total Calories: {item.fat_calories + item.protein_calories + item.carbs_calories} <br/>
+                Total Calories: {parseInt(item.fat_calories + item.protein_calories + item.carbs_calories)} <br/>
                 {
                   item.status ?
                     <div> 

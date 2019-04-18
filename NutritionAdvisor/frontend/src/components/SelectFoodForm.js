@@ -1,10 +1,10 @@
 import React from 'react';
 import axios from 'axios';
 import {
-  Form, Input, Button, TreeSelect,
+  Form, Input, Button, Select, Row, Col, Icon, Statistic,
 } from 'antd';
 
-const TreeNode = TreeSelect.TreeNode;
+const Option = Select.Option;
 
 const formItemLayout = {
     labelCol: { span: 4 },
@@ -18,10 +18,12 @@ const formTailLayout = {
 
 class SelectFoodCustomForm extends React.Component {
     state = {
-        value: [],
+        value: undefined,
         user: localStorage.getItem('current_id'),
-        plans: {},            
+        plans: {}, 
+        foods: {},           
     }
+
 
     componentDidMount() {
         const planID = this.props.planID;
@@ -31,15 +33,22 @@ class SelectFoodCustomForm extends React.Component {
                 plans: res.data
             });
         })
+
+        axios.get(`http://127.0.0.1:8000/foodtable-api/foods/`)
+        .then(res => {
+            this.setState({
+                foods: res.data
+            });
+        })
     }
 
     handleFormSubmit = (event, requestType, planID) => {
-       event.preventDefault();
+        //event.preventDefault();
 
         const data = {
-            food_id: null,
-            plan_id: this.props.planID,
-            amount: null,
+            food: this.state.value,
+            plan: this.props.planID,
+            amount: event.target.elements.amount.value,
         };
 
         switch ( requestType ) {
@@ -53,28 +62,70 @@ class SelectFoodCustomForm extends React.Component {
 
     handleRedirec = (res) => {
             if( res.statusText === "Created" ){
-                //console.log("su", res.data)
-                const planID = res.data.id;
-                window.location.href = `/${planID}/select`;
+                const planID = this.props.planID;
+                //window.location.href = `/select`;
             }else {
               // Something went wrong here
             }
         }
 
+    handleChange = (value) => {
+        console.log(value);
+        this.setState({ value: value });
+    }
+
     render() {
+        const foods = this.state.foods;
+        const item = this.state.plans;
+        const total_cal = item.fat_calories+item.protein_calories+item.carbs_calories;
         return (
           <div>
-            <Form onSubmit={(event) => this.handleFormSubmit(event, this.props.requestType, this.props.foodID)}>
+            <h3> Current Diet Plan Calories: </h3>
+            <Row gutter={16}>
+              <Col span={8}>
+                <Statistic title="Calories from Fat" value={parseInt(item.fat_calories)} 
+                          suffix={"/"+parseInt(total_cal)+" cal"} />
+              </Col>
+              <Col span={8}>
+                    <Statistic title="Calories from Protein" value={parseInt(item.protein_calories)} 
+                          suffix={"/"+parseInt(total_cal)+" cal"}/>
+              </Col>
+              <Col span={8}>
+                    <Statistic title="Calories from Carbs" value={parseInt(item.carbs_calories)} 
+                          suffix={"/"+parseInt(total_cal)+" cal"}/>
+              </Col>
+            </Row>
+            <hr />
 
-            <div>
+            <Form onSubmit={(event) => this.handleFormSubmit(event, this.props.requestType, this.props.planID)}>
+            <Form.Item {...formItemLayout} label="Food">
+              <Select
+                showSearch
+                style={{ width: 200 }}
+                placeholder="Select a food"
+                optionFilterProp="children"
+                onChange={this.handleChange}
+                >
+              {
+                Object.keys(foods).map( key => {
+                    return <Option key={foods[key].name} value={foods[key].id}>{foods[key].name}</Option>
+                })
+              }
+              </Select>
+            </Form.Item>
+            <Form.Item {...formItemLayout} label="Amount">
+                <Input name='amount' placeholder="enter amount in gram"/>
+            </Form.Item> 
+
               <Form.Item {...formTailLayout} style={{float:'left'}}>
-                <Button type="primary" htmlType="submit">{this.props.btnText}</Button>
+                <Button type="primary" href={`/plans/${this.props.planID}`}>
+                    <Icon type="left" />Back to plan
+                </Button>
               </Form.Item>
 
-               <Form.Item {...formTailLayout} style={{float:'right'}} >
-                <Button type="primary" htmlType="submit">{this.props.btnText}</Button>
+            <Form.Item {...formTailLayout} style={{float:'left', position: 'relative', left: '2%'}}>
+                <Button type="primary" htmlType="submit">Add!</Button>
               </Form.Item>
-            </div>
             </Form>
           </div>
         );

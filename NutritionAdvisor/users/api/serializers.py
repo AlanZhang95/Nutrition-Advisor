@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from users.models import UserProfile
+from dietplan.models import Plan
 from django.contrib.auth.models import User
 from django.db.models import Count
 from rest_framework import serializers
@@ -35,6 +36,7 @@ class UserProfileSerializer(WritableNestedModelSerializer):
     bmr = serializers.SerializerMethodField()
     advised_calories = serializers.SerializerMethodField()
     #bmr: basal metabolic rate
+    user_plans = serializers.SerializerMethodField()
     
     def get_bmr(self, obj):
         gender_q = UserProfile.objects.values('gender').filter(id__in=UserProfile.objects.values('id').filter(id=obj.id))
@@ -94,9 +96,22 @@ class UserProfileSerializer(WritableNestedModelSerializer):
         else:
             return bmr
 
+    def get_user_plans(self, obj):
+        queryset = Plan.objects.values('id','name','date','status','user').filter(user=obj.id)
+        plans = []
+        for plan in queryset:
+            plans.append({
+                "planID": plan['id'],
+                "name": plan['name'],
+                "date": plan['date'],
+                "status": plan['status'],
+            })
+        return plans
+
+
     class Meta:
         model = UserProfile
-        fields = ('id', 'gender', 'my_goal', 'height', 'weight', 'activity', 'age', 'bmr', 'advised_calories')
+        fields = ('id', 'gender', 'my_goal', 'height', 'weight', 'activity', 'age', 'bmr', 'advised_calories', 'user_plans')
 
 class TokenSerializer(serializers.ModelSerializer):
     user = UserSerializer()

@@ -33,7 +33,7 @@ class DietPlanSerializer(serializers.ModelSerializer):
         food_query = Food.objects.values('fat', 'id').filter(id__in=GeneratedBy.objects.values('food_id').filter(plan_id=obj.id))
         fat_cal = 0
         for food in food_query:
-            amount = GeneratedBy.objects.values('amount','food_id').filter(food_id=food['id'])
+            amount = GeneratedBy.objects.values('amount','food_id','plan_id').filter(food_id=food['id'],plan_id=obj.id)
             for num in amount:
                 fat_cal += food['fat'] * 8 * num['amount'] / 100
         return fat_cal
@@ -42,7 +42,7 @@ class DietPlanSerializer(serializers.ModelSerializer):
         food_query = Food.objects.values('protein', 'id').filter(id__in=GeneratedBy.objects.values('food_id').filter(plan_id=obj.id))
         protein_cal = 0
         for food in food_query:
-            amount = GeneratedBy.objects.values('amount','food_id').filter(food_id=food['id'])
+            amount = GeneratedBy.objects.values('amount','food_id','plan_id').filter(food_id=food['id'],plan_id=obj.id)
             for num in amount:
                 protein_cal += food['protein'] * 4 * num['amount'] / 100
         return protein_cal
@@ -51,7 +51,7 @@ class DietPlanSerializer(serializers.ModelSerializer):
         food_query = Food.objects.values('carbs', 'id').filter(id__in=GeneratedBy.objects.values('food_id').filter(plan_id=obj.id))
         carbs_cal = 0
         for food in food_query:
-            amount = GeneratedBy.objects.values('amount','food_id').filter(food_id=food['id'])
+            amount = GeneratedBy.objects.values('amount','food_id','plan_id').filter(food_id=food['id'],plan_id=obj.id)
             for num in amount:
                 carbs_cal += food['carbs'] * 4 * num['amount'] / 100
         return carbs_cal
@@ -66,7 +66,7 @@ class DietPlanSerializer(serializers.ModelSerializer):
         food_query = Food.objects.values('name', 'id').filter(id__in=GeneratedBy.objects.values('food_id').filter(plan_id=obj.id))
         amounts = {}
         for food in food_query:
-            amount_query = GeneratedBy.objects.values('amount','food_id').filter(food_id=food['id'])
+            amount_query = GeneratedBy.objects.values('amount','food_id','plan_id').filter(food_id=food['id'],plan_id=obj.id)
             for amount in amount_query:
                 amounts[food['name']] = amount['amount'] 
         return amounts
