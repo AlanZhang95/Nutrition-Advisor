@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include 
+from django.urls import path, include
 from django.conf.urls import url
 
 urlpatterns = [
@@ -9,6 +9,7 @@ urlpatterns = [
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('users-api/', include('users.api.urls')),  #
     path('foodtable-api/', include('foodtable.api.urls')),
-    path('dietplan-api/', include('dietplan.api.urls')),  
+    path('dietplan-api/', include('dietplan.api.urls')),
     path('restaurant-api/', include('restaurant.api.urls')),
+    path('weighttracker-api/', include('weighttracker.api.urls')),
 ]

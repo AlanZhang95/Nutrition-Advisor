@@ -9,7 +9,10 @@ class Tracker(models.Model):
         on_delete=models.CASCADE
         )
     date = now
-    weight = models.IntegerField()
+    weight = models.DecimalField(
+        max_digits=5,
+        decimal_places=2
+    )
     calories_consumed = models.IntegerField(
         blank=True
     )

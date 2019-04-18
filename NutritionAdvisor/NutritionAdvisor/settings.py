@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'users',
     'foodtable',
     'dietplan',
+    'weighttracker'
 ]
 SITE_ID = 1
 
