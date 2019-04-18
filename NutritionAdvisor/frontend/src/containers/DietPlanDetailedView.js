@@ -65,13 +65,13 @@ class DietPlanDetail extends React.Component {
                     <h3> Calories:  </h3>
                     <Row gutter={16}>
                         <Col span={8}>
-                          <Statistic title="Calories from Fat" value={item.fat_calories} suffix={"/"+total_cal} />
+                          <Statistic title="Calories from Fat" value={item.fat_calories} suffix={"/"+total_cal+" cal"} />
                         </Col>
                         <Col span={8}>
-                          <Statistic title="Calories from Protein" value={item.protein_calories} suffix={"/"+total_cal}/>
+                          <Statistic title="Calories from Protein" value={item.protein_calories} suffix={"/"+total_cal+" cal"}/>
                         </Col>
                         <Col span={8}>
-                          <Statistic title="Calories from Carbs" value={item.carbs_calories} suffix={"/"+total_cal}/>
+                          <Statistic title="Calories from Carbs" value={item.carbs_calories} suffix={"/"+total_cal+" cal"}/>
                         </Col>
                     </Row>
 

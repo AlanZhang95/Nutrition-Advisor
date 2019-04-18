@@ -88,7 +88,7 @@ class FoodDetail extends React.Component {
                 
                 <Collapse bordered={false} defaultActiveKey={['3']}>
                     <Panel header="Update this food" key="1">
-                        <CustomForm requestType='put' foodID={this.props.match.params.foodID} btnText='Update'/>
+                        <CustomForm requestType='put' foods={this.state.foods} foodID={this.props.match.params.foodID} btnText='Update'/>
                     </Panel>
                     <Panel header="Delete this food" key="2">
                         <Form onSubmit={this.handleDelete}>
