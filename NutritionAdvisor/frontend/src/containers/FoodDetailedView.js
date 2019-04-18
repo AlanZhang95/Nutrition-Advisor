@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Card, Button, Form, Collapse} from 'antd';
+import { Card, Button, Form, Collapse, Skeleton, Row, Col, Statistic} from 'antd';
 import CustomForm from '../components/Form'
 
 const Panel = Collapse.Panel;
@@ -38,17 +38,32 @@ class FoodDetail extends React.Component {
 
         return (
             <div>
+            {
+                typeof item.name == 'undefined' ?
+                <Skeleton />
+                :
                 <Card title={item.name} >
-                    <h3> This is a {source_dict[item.source_type]}</h3>
+                    <h4> This is a {source_dict[item.source_type]}</h4>
 
-                    <h2> Nutritions: </h2>
+                    <h3> Nutritions: </h3>
 
-                        Carb: {item.carbs} <br/>
-                        Fiber: {item.fiber} <br/>
-                        Protein: {item.protein} <br/>
-                        Fat: {item.fat}
-                </Card><br />
+                        <Row gutter={16}>
+                        <Col span={6}>
+                          <Statistic title="Fat" value={item.fat} suffix="/100 g"/>
+                        </Col>
+                        <Col span={6}>
+                          <Statistic title="Protein" value={item.protein} suffix="/100 g"/>
+                        </Col>
+                        <Col span={6}>
+                          <Statistic title="Carbonhydrates" value={item.carbs} suffix="/100 g"/>
+                        </Col>
+                        <Col span={6}>
+                          <Statistic title="Fiber" value={item.fiber} suffix="/100 g"/>
+                        </Col>
+                    </Row>
 
+                </Card>
+            }
                 {/* 
                     typeof summary !== 'undefined' ?
                     <Card title="summary" >

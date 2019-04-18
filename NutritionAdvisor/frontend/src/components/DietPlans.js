@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Card } from 'antd';
+import { List, Card, Icon, } from 'antd';
 
 const DietPlans = (props) => {
     return (
@@ -11,16 +11,23 @@ const DietPlans = (props) => {
         renderItem={item => (
           <List.Item>
             <Card title={<a href={`plans/${item.id}`}>{item.name}</a>}>
-                Plan Goal: <br/>
-                {item.goal} <br/>
-                Status: <br /> 
+                Created By: {item.username} <br/>
+                Date: {item.date.substring(0, 10)} <br/>
+                Total Calories: {item.fat_calories + item.protein_calories + item.carbs_calories} <br/>
                 {
                   item.status ?
-                    "Finished" : "In Progress"
+                    <div> 
+                      Status:  <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a"/> Completed
+                    </div>
+                    : 
+                    <div> 
+                      Status: <Icon type="hourglass" theme="twoTone" /> In Progress
+                    </div>
                 }
             </Card>
           </List.Item>
-        )}
+        )
+      }
       />
     );
 };
