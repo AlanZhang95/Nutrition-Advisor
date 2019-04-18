@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import {
-  Form, Input, Button, TreeSelect,
+  Form, Input, Button, TreeSelect, Icon,
 } from 'antd';
 
 const TreeNode = TreeSelect.TreeNode;
@@ -60,13 +60,13 @@ class DietPlanCustomForm extends React.Component {
     render() {
         return (
           <div>
-            <Form onSubmit={(event) => this.handleFormSubmit(event, this.props.requestType, this.props.foodID)}>
+            <Form onSubmit={(event) => this.handleFormSubmit(event, this.props.requestType, this.props.planID)}>
               <Form.Item {...formItemLayout} label="Name">
                 <Input name="name" placeholder="Give your plan a fancy name" /> <br/>
               </Form.Item>
 
               <Form.Item {...formTailLayout} >
-                <Button type="primary" htmlType="submit">{this.props.btnText}</Button>
+                <Button type="primary" htmlType="submit">{this.props.btnText}  <Icon type="right" /> </Button>
               </Form.Item>
             </Form>
           </div>

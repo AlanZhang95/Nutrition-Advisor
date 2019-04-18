@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Card, Button, Form, Skeleton, Statistic, Row, Col, Icon} from 'antd';
+import { Card, Button, Form, Skeleton, Statistic, Row, Col, Icon, Switch, Popconfirm, } from 'antd';
 import DietPlanCustomForm from '../components/DietPlanForm'
 
 const formTailLayout = {
@@ -22,18 +22,37 @@ class DietPlanDetail extends React.Component {
             axios.get(`http://127.0.0.1:8000/dietplan-api/plans/${planID}`)
             .then(res => {
                 this.setState({
-                    id: planID,
                     plans: res.data
                 });
             })
         }
+        this.setState({id: planID})
     }
 
     handleDelete = (event) => {
         const planID = this.props.match.params.planID;
         axios.delete(`http://127.0.0.1:8000/dietplan-api/plans/${planID}`);
-        this.props.history.push('/');
-        this.forceUpdate();
+        window.location.href = "http://localhost:3000/plans"
+    }
+
+    onChange = (event) => {
+        const planID = this.props.match.params.planID;
+        const data = {
+            name: this.state.plans.name,
+            date: this.state.plans.date, 
+            user: this.state.plans.user,
+            status: true,
+        }
+
+        console.log(data)
+        axios.put(`http://127.0.0.1:8000/dietplan-api/plans/${planID}/`, data)
+        .then(this.reload)
+    }
+
+    reload = (res) => {
+        if(res.status == 200){
+            window.location.reload()
+        }
     }
 
     render() {
@@ -51,7 +70,6 @@ class DietPlanDetail extends React.Component {
             </Col>
         )} 
 
-        console.log(this.state.id)
         if (this.state.id !== "create"){
         return (
             <div>
@@ -70,17 +88,25 @@ class DietPlanDetail extends React.Component {
                             {foods_list}
                         </Row>
                     </div> 
+
+                    <Button type="primary" href={`${this.state.id}/select`} >
+                      Add more foods<Icon type="right" />
+                    </Button>
+
                     <hr />
                     <h3> Calories:  </h3>
                     <Row gutter={16}>
                         <Col span={8}>
-                          <Statistic title="Calories from Fat" value={item.fat_calories} suffix={"/"+total_cal+" cal"} />
+                          <Statistic title="Calories from Fat" value={parseInt(item.fat_calories)} 
+                          suffix={"/"+parseInt(total_cal)+" cal"} />
                         </Col>
                         <Col span={8}>
-                          <Statistic title="Calories from Protein" value={item.protein_calories} suffix={"/"+total_cal+" cal"}/>
+                          <Statistic title="Calories from Protein" value={parseInt(item.protein_calories)} 
+                          suffix={"/"+parseInt(total_cal)+" cal"}/>
                         </Col>
                         <Col span={8}>
-                          <Statistic title="Calories from Carbs" value={item.carbs_calories} suffix={"/"+total_cal+" cal"}/>
+                          <Statistic title="Calories from Carbs" value={parseInt(item.carbs_calories)} 
+                          suffix={"/"+parseInt(total_cal)+" cal"}/>
                         </Col>
                     </Row>
 
@@ -95,8 +121,27 @@ class DietPlanDetail extends React.Component {
                     : 
                     <div> 
                       <Icon type="hourglass" theme="twoTone" /> In Progress
+
                     </div>
+
                     }
+
+
+                    <br/>
+
+
+                    {
+                        item.status ? 
+                        <br/>
+
+                        : 
+
+                        <Button style={{float: 'left'}} type='primary' onClick={this.onChange}> Mark as completed </Button>
+                    }
+
+                    <Popconfirm title="Are you sure delete this task?" onConfirm={this.handleDelete} okText="Yes" cancelText="No">
+                        <Button style={{float: 'left'}} type='danger'> Delete this plan</Button>
+                    </Popconfirm>
                 </Card>
             }
             </div>
@@ -106,7 +151,7 @@ class DietPlanDetail extends React.Component {
             return (
                 <div>
                 <h4>Create your own diet plan here!</h4>
-                    <DietPlanCustomForm requestType='post' btnText='Create'/>
+                    <DietPlanCustomForm  requestType='post' btnText='Create'/>
                 </div>
             )
         }

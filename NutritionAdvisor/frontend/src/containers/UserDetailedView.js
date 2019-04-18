@@ -1,8 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { Card, Button, Form, Collapse, Input, Select, Slider, Icon, Row, Col, Statistic, Skeleton} from 'antd';
+import { 
+  Card, Button, Form, Collapse, Input, Select, Slider, Icon, Row, Col, Statistic, Skeleton, Tabs, List,
+} from 'antd';
 
 const Panel = Collapse.Panel;
+const TabPane= Tabs.TabPane;
 const Option = Select.Option;
 
 const formItemLayout = {
@@ -119,9 +122,13 @@ class UserDetail extends React.Component {
     }
     render() {
         const item = this.state.user;
+        const plans = item.user_plans;
+        console.log(plans)
         return (
             <div>
-            <h1> My Profile </h1>
+            <Tabs defaultActiveKey="1">
+            <TabPane tab="Profile" key="1">
+            <h3> My Profile </h3>
             {
 
                 typeof item.gender !== 'undefined' ? 
@@ -161,26 +168,71 @@ class UserDetail extends React.Component {
                     </Form.Item>
                 </Form>
                 :
-
                 <Skeleton />
             }
+            </TabPane>
+            <TabPane tab="Status" key="2">
+            <h3>My Status</h3>
 
-            <h1>My Status</h1>
 
-
-            <Row gutter={16}>
+            <Row gutter={16} style={{paddingLeft: '50px'}}>
                     <Col span={12}>
-                      <Statistic title="Advised Calories" value={ Math.round(item.advised_calories)} />
+                      <Statistic title="Current BMR" value={item.bmr} />
                     </Col>
                     <Col span={12}>
-                      <Statistic title="BMR" value={item.bmr} />
+                      <Statistic title="Advised Calories" value={ Math.round(item.advised_calories)} suffix="cal" />
                     </Col>
                 </Row>
 
+
+
+            <p style={{color: '#6d3939', paddingTop: '20px'}}>  
+            <Icon type="notification" style={{paddingLeft:'10px', paddingRight:'10px'}} />
+            BMR stands for '<b>basal maetabolic rate</b>', it shows the calories that you need to keep current weight at rest. </p>
+            <p style={{color: '#6d3939', paddingTop: '5px'}}> 
+            <Icon type="notification" style={{paddingLeft:'10px', paddingRight:'10px'}} />
+            The advised calories will guide you to your goal based on your current BMR, 
+            and activity level. <b>Remeber, to lose 1lb of fat, you need to have 3500 Cal deficit</b> </p>
             <h1></h1>
+            </TabPane>
 
-            <Button type="primary" href='/plans/create' onClick={this.handleClick} >Create a Diet Plan</Button>
 
+            <TabPane tab="Plans" key="3">
+              <h3> My Plans </h3>
+
+            <List
+              itemLayout="horizontal"
+              dataSource={plans}
+              renderItem={item => (
+                <List.Item>
+                  <List.Item.Meta
+                    title={<a href={`http://localhost:3000/plans/${item.planID}`}>{item.name}</a>}
+                    description={item.date.substring(0,10)}
+                  />
+
+                  <div>
+                    {
+                      item.status ?
+                    <div> 
+                       <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a"/> Completed
+                    </div>
+                    : 
+                    <div> 
+                      <Icon type="hourglass" theme="twoTone" /> In Progress
+                    </div>
+                    }
+                  </div>
+                </List.Item>
+              )}
+            />
+
+
+            <Button type="primary" href='/plans/create' onClick={this.handleClick} >
+              Create a New Plan <Icon type="right" /> 
+
+            </Button>
+            </TabPane>
+            </Tabs>
             </div>
         )
     }

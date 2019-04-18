@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Card, Button, Form, Collapse, Skeleton, Row, Col, Statistic} from 'antd';
+import { Card, Button, Form, Collapse, Skeleton, Row, Col, Statistic, Popconfirm, } from 'antd';
 import CustomForm from '../components/Form'
 
 const Panel = Collapse.Panel;
@@ -90,15 +90,11 @@ class FoodDetail extends React.Component {
                     <Panel header="Update this food" key="1">
                         <CustomForm requestType='put' foods={this.state.foods} foodID={this.props.match.params.foodID} btnText='Update'/>
                     </Panel>
-                    <Panel header="Delete this food" key="2">
-                        <Form onSubmit={this.handleDelete}>
-                            Are you sure?
-                            <Form.Item layout='inline'>
-                                <Button type='danger' htmlType='submit'> Confirm Delete! </Button>
-                            </Form.Item>
-                        </Form>
-                    </Panel>
-                  </Collapse>
+                </Collapse>
+                <br /> 
+                <Popconfirm title="Are you sure delete this food?" onConfirm={this.handleDelete} okText="Yes" cancelText="No">
+                    <Button type='danger'> Delete Food </Button>
+                </Popconfirm>
             </div>
         )
     }
