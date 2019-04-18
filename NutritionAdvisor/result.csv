@@ -1,0 +1,32 @@
+,name,choices,aggregate,goal
+0,Panda Express,21,3,Transform
+1,Burrito King,19,2,Transform
+2,kfc,13,8,Lose Fat
+3,Siam Terrace,26,3,Gain Muscle
+4,Taco Bell,7,5,Lose Fat
+5,Ko Fusion Campus,20,0,Transform
+6,Taco Motorizado,18,4,Transform
+7,Jurassic Grill,11,9,Lose Fat
+8,D.P. Dough,19,9,Transform
+9,Ambar India,24,5,Gain Muscle
+10,Windy City Express,17,3,Transform
+11,Manolo's Pizza & Empanadas,24,3,Gain Muscle
+12,BBQ PREMIUM CHICKEN,7,14,Lose Fat
+13,Masijta Grill,21,9,Transform
+14,Golden Wok,26,4,Gain Muscle
+15,Rosati's Pizza,22,8,Transform
+16,Bangkok Thai Restaurant,28,2,Gain Muscle
+17,Xinh Xinh Cafe,25,2,Gain Muscle
+18,Four Breakfast & More,33,4,Gain Muscle
+19,Basil Thai,28,2,Gain Muscle
+20,The Dancing Dog Eatery,20,-4,Transform
+21,Wingstop,10,0,Lose Fat
+22,Merry Ann's Diner,25,0,Gain Muscle
+23,Niro's Gyros - University Ave,18,2,Transform
+24,Poke Lab,11,-1,Lose Fat
+25,Salad Meister,24,-1,Gain Muscle
+26,JJ Fish and Chicken,12,7,Lose Fat
+27,Koh-i-noor Indian Restaurant and Lounge,24,3,Gain Muscle
+28,Qdoba Mexican Eats,21,5,Transform
+29,Caribbean Grill Restaurant,20,8,Transform
+30,Signature Grill,18,3,Transform

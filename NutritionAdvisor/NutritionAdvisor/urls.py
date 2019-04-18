@@ -10,4 +10,5 @@ urlpatterns = [
     path('users-api/', include('users.api.urls')),  #
     path('foodtable-api/', include('foodtable.api.urls')),
     path('dietplan-api/', include('dietplan.api.urls')),  
+    path('restaurant-api/', include('restaurant.api.urls')),
 ]

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'corsheaders',
     #self-created apps
+    'restaurant',
     'users',
     'foodtable',
     'dietplan',
