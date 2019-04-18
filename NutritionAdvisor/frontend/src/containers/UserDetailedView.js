@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Card, Button, Form, Collapse, Input, Select, Slider, Icon, Row, Col, Statistic} from 'antd';
+import { Card, Button, Form, Collapse, Input, Select, Slider, Icon, Row, Col, Statistic, Skeleton} from 'antd';
 
 const Panel = Collapse.Panel;
 const Option = Select.Option;
@@ -113,9 +113,6 @@ class UserDetail extends React.Component {
             activity: value
         })
     }
-    handleClick = (value) => {
-        localStorage.setItem('cal', this.state.user.advised_calories)
-    }
 
     formatter = (value) => {
         return `${active[value]}`
@@ -165,7 +162,7 @@ class UserDetail extends React.Component {
                 </Form>
                 :
 
-                "loading..."
+                <Skeleton />
             }
 
             <h1>My Status</h1>
@@ -173,7 +170,7 @@ class UserDetail extends React.Component {
 
             <Row gutter={16}>
                     <Col span={12}>
-                      <Statistic title="Advised Calories" value={ Math.round(item.advised_calories)} prefix={<Icon type="like" />} />
+                      <Statistic title="Advised Calories" value={ Math.round(item.advised_calories)} />
                     </Col>
                     <Col span={12}>
                       <Statistic title="BMR" value={item.bmr} />
@@ -182,7 +179,7 @@ class UserDetail extends React.Component {
 
             <h1></h1>
 
-            <Button type="primary" href='/dietplan/create' onClick={this.handleClick} >Create a Diet Plan</Button>
+            <Button type="primary" href='/plans/create' onClick={this.handleClick} >Create a Diet Plan</Button>
 
             </div>
         )

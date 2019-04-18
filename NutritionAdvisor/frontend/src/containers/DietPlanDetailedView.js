@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Card, Button, Form, Skeleton, Statistic, Row, Col, Icon} from 'antd';
-import CustomForm from '../components/Form'
+import DietPlanCustomForm from '../components/DietPlanForm'
 
 const formTailLayout = {
     labelCol: { span: 4 },
@@ -11,17 +11,22 @@ const formTailLayout = {
 class DietPlanDetail extends React.Component {
     
     state = {
-        plans: {}
+        id: null,
+        plans: {},
+        all_foods: {},
     }
 
     componentDidMount() {
         const planID = this.props.match.params.planID;
-        axios.get(`http://127.0.0.1:8000/dietplan-api/plans/${planID}`)
-        .then(res => {
-            this.setState({
-                plans: res.data
-            });
-        })
+        if (planID !== "create"){
+            axios.get(`http://127.0.0.1:8000/dietplan-api/plans/${planID}`)
+            .then(res => {
+                this.setState({
+                    id: planID,
+                    plans: res.data
+                });
+            })
+        }
     }
 
     handleDelete = (event) => {
@@ -34,6 +39,7 @@ class DietPlanDetail extends React.Component {
     render() {
         const item = this.state.plans;
         const foods = item.foods_list;
+
         let foods_list = null;
 
         const total_cal = item.fat_calories + item.protein_calories + item.carbs_calories
@@ -44,9 +50,12 @@ class DietPlanDetail extends React.Component {
                 <Statistic title={food} value={item.amounts[food]} suffix="g" />
             </Col>
         )} 
+
+        console.log(this.state.id)
+        if (this.state.id !== "create"){
         return (
             <div>
-            {
+            { 
                 typeof item.date == 'undefined' ? 
                 <Skeleton />
                 :
@@ -92,6 +101,15 @@ class DietPlanDetail extends React.Component {
             }
             </div>
         )
+        }
+        else {
+            return (
+                <div>
+                <h4>Create your own diet plan here!</h4>
+                    <DietPlanCustomForm requestType='post' btnText='Create'/>
+                </div>
+            )
+        }
     }
 }
 

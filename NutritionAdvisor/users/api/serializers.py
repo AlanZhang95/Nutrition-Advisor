@@ -31,7 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id','username', 'email')
 
 class UserProfileSerializer(WritableNestedModelSerializer):
-    user = UserSerializer()
+    #user = UserSerializer()
     bmr = serializers.SerializerMethodField()
     advised_calories = serializers.SerializerMethodField()
     #bmr: basal metabolic rate
@@ -96,7 +96,7 @@ class UserProfileSerializer(WritableNestedModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('id', 'user', 'gender', 'my_goal', 'height', 'weight', 'activity', 'age', 'bmr', 'advised_calories')
+        fields = ('id', 'gender', 'my_goal', 'height', 'weight', 'activity', 'age', 'bmr', 'advised_calories')
 
 class TokenSerializer(serializers.ModelSerializer):
     user = UserSerializer()

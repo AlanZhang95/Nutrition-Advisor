@@ -13,6 +13,8 @@ class DietPlanSerializer(serializers.ModelSerializer):
     fat_calories = serializers.SerializerMethodField()
     protein_calories = serializers.SerializerMethodField()
     carbs_calories = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+    amounts = serializers.SerializerMethodField()
     def get_foods_list(self, obj):
         queryset = Food.objects.values('name').filter(id__in=GeneratedBy.objects.values('food_id').filter(plan_id=obj.id))
         food_list = []
@@ -26,7 +28,6 @@ class DietPlanSerializer(serializers.ModelSerializer):
         for food in food_query:
             amount = GeneratedBy.objects.values('amount','food_id').filter(food_id=food['id'])
             for num in amount:
-                print(num)
                 fat_cal += food['fat'] * 8 * num['amount'] / 100
         return fat_cal
 
@@ -36,7 +37,6 @@ class DietPlanSerializer(serializers.ModelSerializer):
         for food in food_query:
             amount = GeneratedBy.objects.values('amount','food_id').filter(food_id=food['id'])
             for num in amount:
-                print(num)
                 protein_cal += food['protein'] * 4 * num['amount'] / 100
         return protein_cal
 
@@ -46,15 +46,28 @@ class DietPlanSerializer(serializers.ModelSerializer):
         for food in food_query:
             amount = GeneratedBy.objects.values('amount','food_id').filter(food_id=food['id'])
             for num in amount:
-                print(num)
                 carbs_cal += food['carbs'] * 4 * num['amount'] / 100
         return carbs_cal
 
+    def get_username(self, obj):
+        queryset = User.objects.values('id', 'username').filter(id=obj.user.id)
+        for user in queryset:
+            author = user['username']
+        return author
+
+    def get_amounts(self, obj):
+        food_query = Food.objects.values('name', 'id').filter(id__in=GeneratedBy.objects.values('food_id').filter(plan_id=obj.id))
+        amounts = {}
+        for food in food_query:
+            amount_query = GeneratedBy.objects.values('amount','food_id').filter(food_id=food['id'])
+            for amount in amount_query:
+                amounts[food['name']] = amount['amount'] 
+        return amounts
 
     class Meta:
         model = Plan
         fields = ('id', 'name', 'date', 
             'user', 'status', 
-            'foods_list', 'foods', 'fat_calories', 'protein_calories', 'carbs_calories')
+            'foods_list', 'foods', 'fat_calories', 'protein_calories', 'carbs_calories', 'username', 'amounts', )
             #'carbs_cal','fat_cal', , 'total_cal''protein_cal', 
     

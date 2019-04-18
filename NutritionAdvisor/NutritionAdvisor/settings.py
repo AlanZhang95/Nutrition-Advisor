@@ -150,6 +150,9 @@ AUTHENTICATION_BACKENDS = (
    "allauth.account.auth_backends.AuthenticationBackend"
 )
 
+#AUTH_PROFILE_MODULE = 'users.UserProfile'
+
+
 CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
 )
