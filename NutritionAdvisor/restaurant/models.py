@@ -1,9 +1,8 @@
 from django.db import models
 
 # Create your models here.
-class recommendation(models.Model):
-    name = models.CharField(unique=True)
+class Recommendation(models.Model):
+    name = models.CharField(max_length=50, unique=True)
     choices = models.IntegerField()
     aggregate = models.IntegerField()
-    goal = models.CHarField()
-    
+    goal = models.CharField(max_length=20)
