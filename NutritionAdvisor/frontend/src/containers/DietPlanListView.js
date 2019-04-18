@@ -9,7 +9,7 @@ class DietPlanList extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://127.0.0.1:8000/api/plans/')
+        axios.get('http://127.0.0.1:8000/dietplan-api/plans/')
         .then(res => {
             this.setState({
                 plans: res.data

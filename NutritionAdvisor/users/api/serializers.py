@@ -5,6 +5,15 @@ from django.db.models import Count
 from rest_framework import serializers
 from rest_auth.models import TokenModel
 from drf_writable_nested import WritableNestedModelSerializer
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance, height=0, age=0, weight=0)
+
 
 def cal_bmr(gender, age, weight, height):  #reference: http://www.jurnal.unsyiah.ac.id/AIJST/article/view/5196/pdf(Hlbert and Elesa, 2004)
     male_bmr = 66 + 13.7 * weight + 5 * height - 6.8 * age
@@ -19,7 +28,7 @@ def cal_bmr(gender, age, weight, height):  #reference: http://www.jurnal.unsyiah
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'email')
+        fields = ('id','username', 'email')
 
 class UserProfileSerializer(WritableNestedModelSerializer):
     user = UserSerializer()
@@ -87,7 +96,7 @@ class UserProfileSerializer(WritableNestedModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('user', 'gender', 'my_goal', 'height', 'weight', 'activity', 'age', 'bmr', 'advised_calories')
+        fields = ('id', 'user', 'gender', 'my_goal', 'height', 'weight', 'activity', 'age', 'bmr', 'advised_calories')
 
 class TokenSerializer(serializers.ModelSerializer):
     user = UserSerializer()

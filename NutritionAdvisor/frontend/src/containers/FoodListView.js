@@ -2,6 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import Foods from '../components/Foods'
 import CustomForm from '../components/Form'
+import { Collapse, } from 'antd';
+
+const Panel = Collapse.Panel;
 
 class FoodList extends React.Component {
     
@@ -15,7 +18,7 @@ class FoodList extends React.Component {
             this.setState({
                 foods: res.data
             });
-            console.log("debug massages:",res.data)
+            //console.log("debug massages:",res.data)
         })
     }
 
@@ -24,8 +27,14 @@ class FoodList extends React.Component {
             <div>
                 <Foods data={this.state.foods} />
                 <br />
-                <h2> Create New Food </h2>
-                <CustomForm requestType='post' foodID={null} btnText='Create'/>
+
+                Cannot find your favorite food? Try: <br/>
+                  <Collapse bordered={false} defaultActiveKey={['2']}>
+                    <Panel header="Create New Food" key="1">
+                        <CustomForm requestType='post' foodID={null} btnText='Create'/>
+                    </Panel>
+                  </Collapse>
+                
             </div>
 
 
