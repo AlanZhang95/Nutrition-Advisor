@@ -8,6 +8,13 @@ from rest_framework import serializers
 from rest_auth.models import TokenModel
 from drf_writable_nested import WritableNestedModelSerializer
 
+class GeneratedBySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GeneratedBy
+        fields = (
+            'plan', 'food', 'amount'
+        )
+
 class DietPlanSerializer(serializers.ModelSerializer):
     foods_list = serializers.SerializerMethodField()
     fat_calories = serializers.SerializerMethodField()

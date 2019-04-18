@@ -3,7 +3,7 @@ from django.utils.timezone import now
 from django.contrib.auth.models import User
 # Create your models here.
 
-class tracker(models.Model):
+class Tracker(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE
@@ -13,5 +13,3 @@ class tracker(models.Model):
     calories_consumed = models.IntegerField(
         blank=True
     )
-
-
