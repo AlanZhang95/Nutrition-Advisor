@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { 
-  Card, Button, Form, Collapse, Input, Select, Slider, Icon, Row, Col, Statistic, Skeleton, Tabs, List,
+  Card, Button, Form, Collapse, Input, Select, Slider, Icon, Row, Col, Statistic, Skeleton, Tabs, List, 
 } from 'antd';
 
 const Panel = Collapse.Panel;
@@ -117,13 +117,22 @@ class UserDetail extends React.Component {
         })
     }
 
+    handleStatSubmit = (event, user) => {
+        const data = {
+          user: user,
+          weight: event.target.elements.weight.value,
+          calories_consumed: event.target.elements.cal.value,
+        } 
+        axios.post(`http://127.0.0.1:8000/weighttracker-api/tracker/`, data)
+        .then(window.location.reload())
+    }
+
     formatter = (value) => {
         return `${active[value]}`
     }
     render() {
         const item = this.state.user;
         const plans = item.user_plans;
-        console.log(plans)
         return (
             <div>
             <Tabs defaultActiveKey="1">
@@ -231,6 +240,23 @@ class UserDetail extends React.Component {
               Create a New Plan <Icon type="right" /> 
 
             </Button>
+            </TabPane>
+            <TabPane tab="Track" key="4">
+            <h3> My Weight Track </h3> 
+
+            <Form onSubmit={(event) => this.handleStatSubmit(event, this.state.user)}> 
+              <Form.Item {...formItemLayout} label="Current Weight"> 
+                  <Input name="weight" defaultValue={item.weight} />
+              </Form.Item>
+
+              <Form.Item {...formItemLayout} label="Calories Cosumed">
+                  <Input name="cal" placeholder="enter calories cosumed today" />
+              </Form.Item> 
+
+              <Form.Item {...formItemLayout}>
+                <Button type="primary" htmlType="submit"> Submit </Button> 
+              </Form.Item> 
+            </Form>
             </TabPane>
             </Tabs>
             </div>
