@@ -8,6 +8,7 @@ import UserDetail from './containers/UserDetailedView';
 import SelectFood from './containers/SelectFoodView';
 import Login from "./containers/Login";
 import Signup from "./containers/Signup";
+import Recommend from "./containers/Recommend";
 
 const BaseRouter = () => (
     <div>
@@ -19,6 +20,8 @@ const BaseRouter = () => (
         <Route exact path='/users/:userID' component={UserDetail} />{" "}
         <Route exact path="/login/" component={Login} />{" "} 
         <Route exact path="/signup/" component={Signup} />{" "}
+        <Route exact path="/recommend/" component={Recommend} />{" "}
+
     </div>
 );
 
