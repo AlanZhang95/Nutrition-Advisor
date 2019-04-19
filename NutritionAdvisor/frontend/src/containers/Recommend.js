@@ -168,7 +168,8 @@ class Recommend extends Component{
                   bordered
                   dataSource={this.state.Res}
                   renderItem={item => (<List.Item>
-                    <Icon style={{paddingRight:'10px',fontSize:'20px'}}type="right-circle" /><a href={"https://www.ubereats.com/en-US/search/?q="+item}>{item} </a> 
+                    <Icon style={{paddingRight:'10px',fontSize:'20px'}}type="right-circle" />
+                    <a href={"https://www.ubereats.com/en-US/stores/?q="+item}>{item} </a> 
                     </List.Item>)}
                 />
                 /*<ul className="Result" style={{float: 'left', position: 'relative',left:'10%'}}>

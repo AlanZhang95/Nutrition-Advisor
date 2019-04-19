@@ -71,6 +71,7 @@ class UserDetail extends React.Component {
         gender: null,
         my_goal: null,
         activity: null,
+        e_cal: undefined, 
     }
 
     componentDidMount() {
@@ -156,6 +157,14 @@ class UserDetail extends React.Component {
 
     onChangeTab = (key) => {
       localStorage.setItem("defaultkey", key)
+    }
+
+    handleEstimator = (event) => {
+      const e_weight = event.target.elements.e_weight.value;
+      const e_cal = e_weight*this.state.user.correlation.a + this.state.user.correlation.b
+      this.setState({
+        e_cal: e_cal
+      })
     }
 
     render() {
@@ -337,6 +346,26 @@ class UserDetail extends React.Component {
             <div> 
               <CanvasJSChart options={options} onRef={ref => this.chart = ref}/>
             </div>
+
+
+            Calories Estimator
+            <Form onSubmit={(event) => this.handleEstimator(event)}>
+            <Form.Item {...formItemLayout} label="Expected Weight">
+              <Input name="e_weight" > </Input> 
+            </Form.Item> 
+            <Form.Item {...formItemLayout}>
+              <Button htmlType="submit"> calculate </Button> 
+            </Form.Item>
+
+            </Form>
+
+            {
+              typeof this.state.e_cal === 'undefined' ?
+              <br />
+              :
+              Estimated Calories: {this.state.e_cal}
+            }
+
             </TabPane>
             </Tabs>
             </div>
