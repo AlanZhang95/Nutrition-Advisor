@@ -10,22 +10,11 @@ from drf_writable_nested import WritableNestedModelSerializer
 class WeightTrackerSerializer(serializers.ModelSerializer):
     #weight_log = serializers.SerializerMethodField()
     #cal_log = serializers.SerializerMethodField()
-    weight_cal = serializers.SerializerMethodField()
-
-    def get_weight_cal(self, obj):
-        queryset = Tracker.objects.values('weight','calories_consumed','user').filter(user=obj.id)
-        tracks = []
-        for pair in queryset:
-            tracks.append({
-                "weight": pair['weight'],
-                "calories_consumed": pair['calories_consumed'],
-            })
-        return tracks
-
+    
     class Meta:
         model = Tracker
         fields = (
-            'weight', 'calories_consumed', 'weight_cal',
+            'weight', 'calories_consumed', 'user',
         )
         #'weight_log', 'cal_log',
 """
