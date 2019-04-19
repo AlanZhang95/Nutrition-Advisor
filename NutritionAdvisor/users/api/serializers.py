@@ -9,7 +9,8 @@ from drf_writable_nested import WritableNestedModelSerializer
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from weighttracker.models import Tracker
-
+from sklearn.linear_model import LinearRegression
+import numpy as np
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
@@ -38,6 +39,7 @@ class UserProfileSerializer(WritableNestedModelSerializer):
     advised_calories = serializers.SerializerMethodField()
     #bmr: basal metabolic rate
     user_plans = serializers.SerializerMethodField()
+    correlation = serializers.SerializerMethodField()
     
     def get_bmr(self, obj):
         gender_q = UserProfile.objects.values('gender').filter(id__in=UserProfile.objects.values('id').filter(id=obj.id))
@@ -109,6 +111,28 @@ class UserProfileSerializer(WritableNestedModelSerializer):
             })
         return plans
     
+    def get_correlation(self, obj):
+        queryset = Tracker.objects.values('weight','calories_consumed','user').filter(user=obj.id)
+        X = []
+        Y = []
+        for pair in queryset:
+            X.append(
+                [pair['weight']]
+            )
+            Y.append(
+                pair['calories_consumed']
+            )
+        X = np.array(X)
+        Y = np.array(Y)
+        if len(X) > 0: 
+            reg = LinearRegression()
+            reg.fit(X,Y)
+            a=reg.coef_
+            b=reg.intercept_
+            print(a, b)
+            return {'a': a[0], 'b':b}
+        return {'a': 0, 'b': 0}
+
     weight_cal = serializers.SerializerMethodField()
 
     def get_weight_cal(self, obj):
@@ -132,8 +156,10 @@ class UserProfileSerializer(WritableNestedModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('id', 'gender', 'my_goal', 'height', 'weight', 'activity', 'age', 'bmr', 'advised_calories', 'user_plans', 'weight_cal')
-
+        fields = ('id', 'gender', 'my_goal', 'height', 'weight', 
+        'activity', 'age', 'bmr', 'advised_calories', 'user_plans',
+         'weight_cal', 'correlation')
+    #
 class TokenSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
@@ -142,3 +168,6 @@ class TokenSerializer(serializers.ModelSerializer):
 
 
 
+"""
+    
+"""
