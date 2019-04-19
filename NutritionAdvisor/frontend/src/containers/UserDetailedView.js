@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import CanvasJSReact from '../canvasjs.react'
 import { 
   Card, Button, Form, Collapse, Input, Select, Slider, Icon, Row, Col, Statistic, Skeleton, Tabs, List, 
 } from 'antd';
@@ -7,6 +8,13 @@ import {
 const Panel = Collapse.Panel;
 const TabPane= Tabs.TabPane;
 const Option = Select.Option;
+const CanvasJS = CanvasJSReact.CanvasJS;
+const CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
+const formTailLayout = {
+    labelCol: { span: 4 },
+    wrapperCol: { span: 8, offset: 20},
+};
 
 const formItemLayout = {
       labelCol: {
@@ -130,12 +138,81 @@ class UserDetail extends React.Component {
     formatter = (value) => {
         return `${active[value]}`
     }
+
+    constructor() {
+      super();
+      this.toggleDataSeries = this.toggleDataSeries.bind(this);
+    }
+    
+    toggleDataSeries(e){
+      if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+        e.dataSeries.visible = false;
+      }
+      else{
+        e.dataSeries.visible = true;
+      }
+      this.chart.render();
+    }
+
+    onChangeTab = (key) => {
+      localStorage.setItem("defaultkey", key)
+    }
+
     render() {
         const item = this.state.user;
+        console.log(item.weight_cal);
         const plans = item.user_plans;
+        var options = {};
+        if(typeof item.weight_cal !== 'undefined'){
+          options = {
+            theme: "light2",
+            animationEnabled: true,
+            title:{
+              text: "Weight Tracker",
+            },
+            axisY: {
+              title: "Weight",
+              titleFontColor: "#6D78AD",
+              lineColor: "#6D78AD",
+              labelFontColor: "#6D78AD",
+              tickColor: "#6D78AD",
+              includeZero: false
+            },
+            axisY2: {
+              title: "Calories Consumed",
+              titleFontColor: "#51CDA0",
+              lineColor: "#51CDA0",
+              labelFontColor: "#51CDA0",
+              tickColor: "#51CDA0",
+              includeZero: false
+            },
+            toolTip: {
+              shared: true
+            },
+            legend: {
+              cursor: "pointer",
+              itemclick: this.toggleDataSeries
+            },
+            data: [{
+              type: "spline",
+              name: "Weight",
+              showInLegend: true,
+              yValueFormatString: "#,##0.# kg",
+              dataPoints: item.weight_cal['weight'],
+            },
+            {
+              type: "spline",
+              name: "Caloreis Consumed",
+              axisYType: "secondary",
+              showInLegend: true,
+              yValueFormatString: "#,##0.# cal",
+              dataPoints: item.weight_cal['cal'],
+            }]
+          }
+        } 
         return (
             <div>
-            <Tabs defaultActiveKey="1">
+            <Tabs defaultActiveKey={localStorage.getItem("defaultkey")} onChange={this.onChangeTab}>
             <TabPane tab="Profile" key="1">
             <h3> My Profile </h3>
             {
@@ -244,9 +321,9 @@ class UserDetail extends React.Component {
             <TabPane tab="Track" key="4">
             <h3> My Weight Track </h3> 
 
-            <Form onSubmit={(event) => this.handleStatSubmit(event, this.state.user)}> 
+            <Form onSubmit={(event) => this.handleStatSubmit(event, this.state.user.id)}> 
               <Form.Item {...formItemLayout} label="Current Weight"> 
-                  <Input name="weight" defaultValue={item.weight} />
+                  <Input name="weight" defaultValue={item.weight} placeholder="enter your new weight"/>
               </Form.Item>
 
               <Form.Item {...formItemLayout} label="Calories Cosumed">
@@ -257,6 +334,9 @@ class UserDetail extends React.Component {
                 <Button type="primary" htmlType="submit"> Submit </Button> 
               </Form.Item> 
             </Form>
+            <div> 
+              <CanvasJSChart options={options} onRef={ref => this.chart = ref}/>
+            </div>
             </TabPane>
             </Tabs>
             </div>
