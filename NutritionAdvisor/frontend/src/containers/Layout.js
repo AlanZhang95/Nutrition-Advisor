@@ -58,10 +58,9 @@ class CustomLayout extends React.Component {
               }</span>
               </Menu.Item>
               <SubMenu key="sub2" title={<span><Icon type="laptop" />Advanced</span>}>
-                <Menu.Item key="5">Popular Foods</Menu.Item>
-              </SubMenu>
-              <SubMenu key="sub3" title={<span><Icon type="notification" />subnav 3</span>}>
-                <Menu.Item key="9">option9</Menu.Item>
+                <Menu.Item key="5">
+                <Link to="/recommend" > Restaurants </Link> 
+                </Menu.Item>
               </SubMenu>
             </Menu>
           </Sider>
