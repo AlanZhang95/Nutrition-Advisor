@@ -53,12 +53,13 @@ export const authLogin = (username, password) => {
             const userID = res.data.user.id;
             const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
             localStorage.setItem('token', token);
-            localStorage.setItem('current_id', userID);
+            localStorage.setItem('current_id', userID-8);
             localStorage.setItem('current_user', user);
             localStorage.setItem('userstate', token.user);
             localStorage.setItem('expirationDate', expirationDate);
             dispatch(authSuccess(token));
             dispatch(checkAuthTimeout(3600));
+            window.location.href="/plans"
         })
         .catch(err => {
             dispatch(authFail(err))
@@ -81,12 +82,13 @@ export const authSignup = (username, email, password1, password2) => {
             const userID = res.data.user.id;
             const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
             localStorage.setItem('token', token);
-            localStorage.setItem('current_id', userID);
+            localStorage.setItem('current_id', userID-8);
             localStorage.setItem('userstate', token.user);
             localStorage.setItem('expirationDate', expirationDate);
             localStorage.setItem('current_user', user);
             dispatch(authSuccess(token));
             dispatch(checkAuthTimeout(3600));
+            window.location.href="/plans"
         })
         .catch(err => {
             dispatch(authFail(err))
