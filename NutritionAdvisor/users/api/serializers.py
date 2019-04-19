@@ -8,6 +8,7 @@ from rest_auth.models import TokenModel
 from drf_writable_nested import WritableNestedModelSerializer
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from weighttracker.models import Tracker
 
 
 @receiver(post_save, sender=User)
@@ -107,11 +108,23 @@ class UserProfileSerializer(WritableNestedModelSerializer):
                 "status": plan['status'],
             })
         return plans
+    
+    weight_cal = serializers.SerializerMethodField()
+
+    def get_weight_cal(self, obj):
+        queryset = Tracker.objects.values('weight','calories_consumed','user').filter(user=obj.id)
+        tracks = []
+        for pair in queryset:
+            tracks.append({
+                "weight": pair['weight'],
+                "calories_consumed": pair['calories_consumed'],
+            })
+        return tracks
 
 
     class Meta:
         model = UserProfile
-        fields = ('id', 'gender', 'my_goal', 'height', 'weight', 'activity', 'age', 'bmr', 'advised_calories', 'user_plans')
+        fields = ('id', 'gender', 'my_goal', 'height', 'weight', 'activity', 'age', 'bmr', 'advised_calories', 'user_plans', 'weight_cal')
 
 class TokenSerializer(serializers.ModelSerializer):
     user = UserSerializer()
