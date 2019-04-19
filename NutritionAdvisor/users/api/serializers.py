@@ -113,12 +113,20 @@ class UserProfileSerializer(WritableNestedModelSerializer):
 
     def get_weight_cal(self, obj):
         queryset = Tracker.objects.values('weight','calories_consumed','user').filter(user=obj.id)
-        tracks = []
+        weight = []
+        cal = []
         for pair in queryset:
-            tracks.append({
-                "weight": pair['weight'],
-                "calories_consumed": pair['calories_consumed'],
+            weight.append({
+                "y": pair['weight'],
             })
+            cal.append({
+                "y": pair['calories_consumed'],
+            }) 
+
+        tracks = {
+            "weight": weight,
+            "cal": cal, 
+        }
         return tracks
 
 
