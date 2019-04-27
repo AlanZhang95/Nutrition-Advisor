@@ -8,7 +8,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*5j6p1+9!vpq2uq12ej=w5s8g6w!pg6%5^mrb0s@5_8nu&ss%%'
+SECRET_KEY = 'Key Removed' #Key Removed
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -84,8 +84,8 @@ DATABASES = {
         'ENGINE' : 'django.db.backends.postgresql',
         'NAME' : 'makeabduhotagain',#os.path.join(BASE_DIR, 'db.sqlite3'),
         'USER' : 'admin',
-        'PASSWORD' : 'CS411admin',
-        'HOST' : '35.192.103.202',
+        'PASSWORD' : 'Password removed', #Password Removed
+        'HOST' : 'Host ID hided', # Host ID hided
         'PORT' : '5432'
     }
 }
